@@ -20,7 +20,7 @@ export default function Fleet() {
       <div className="py-8 mx-auto w-full">
         <TableFilterForm />
         <div className="py-4">
-          {data.length && (
+          {data?.length && (
             <Typography className="text-white">
               Found {data.length} Records.
             </Typography>
@@ -45,7 +45,7 @@ export default function Fleet() {
                   </tr>
                 </thead>
                 <tbody className="text-xs md:text-base">
-                  {data.length &&
+                  {data?.length &&
                     data.map((r: any) => (
                       <tr
                         key={r.id}
