@@ -6,12 +6,13 @@ import _, { isEqual } from "lodash"
 export type TableRow = {
   id: number
   R_No?: number
-  Depot?: { name: string }
-  Model?: { name: string }
-  Type?: { name: string }
+  Depot?: { name: any }[]
+  Model?: { name: any }[]
+  Type?: { name: any }[]
   R_from?: string
   img_url?: string
   articl_url?: string
+  RegPrefix?: { prefix: any }[]
 }
 
 type TableFilters = {

@@ -27,7 +27,7 @@ type supabaseErrorType = { error: PostgrestError | null }
 
 export const filterOptionsApi = createApi({
   reducerPath: "filterOptions",
-  baseQuery: fakeBaseQuery<supabaseErrorType>(),
+  baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     getAllPrefixes: builder.query<Tables<"RegPrefix">[], void>({
       queryFn: async () => {
@@ -37,7 +37,8 @@ export const filterOptionsApi = createApi({
           .select("id, prefix")
 
         if (error) {
-          return { error }
+          return { error: { status: 500, statusText: 'Internal Server Error', data: error } }
+          // return { error }
         }
         return { data }
       }
@@ -48,7 +49,7 @@ export const filterOptionsApi = createApi({
         const { data, error } = await supabase.from("Depot").select("id, name")
 
         if (error) {
-          return { error }
+          return { error: { status: 500, statusText: 'Internal Server Error', data: error } }
         }
         return { data }
       }
@@ -59,7 +60,7 @@ export const filterOptionsApi = createApi({
         const { data, error } = await supabase.from("Model").select("id, name")
 
         if (error) {
-          return { error }
+          return { error: { status: 500, statusText: 'Internal Server Error', data: error } }
         }
         return { data }
       }
