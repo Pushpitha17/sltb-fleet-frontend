@@ -1,5 +1,6 @@
+'use client'
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import { RootState, store } from "../store"
+import { RootState } from "../store"
 import { createClient } from "@/lib/supabase/client"
 import _, { isEqual } from "lodash"
 
@@ -15,7 +16,7 @@ export type TableRow = {
   RegPrefix?: { prefix: any }[]
 }
 
-type TableFilters = {
+export type TableFilters = {
   prefix: string
   model: string
   depot: string
@@ -25,7 +26,8 @@ type TableState = {
   tableData: TableRow[]
   loading: boolean
   error: string | null
-  tableFilters: TableFilters
+  tableFilters: TableFilters, 
+  search : string,
 }
 
 const initialState: TableState = {
@@ -36,13 +38,14 @@ const initialState: TableState = {
     prefix: "1",
     model: "0",
     depot: "0"
-  }
+  },
+  search: ""
 }
 
-const fetchDataThunk = createAsyncThunk("table/fetchData", async () => {
-  const state = store.getState().table.tableFilters
-  console.log("Thunk Fires")
-  console.log({ fetchDataFilters: state })
+const fetchDataThunk = createAsyncThunk("table/fetchData", async (filterValues : TableFilters) => {
+  // const state = store.getState().table.tableFilters
+  // console.log("Thunk Fires")
+  // console.log({ fetchDataFilters: state })
   const supabase = createClient()
 
   let match: {
@@ -50,9 +53,9 @@ const fetchDataThunk = createAsyncThunk("table/fetchData", async () => {
     modelId?: number
     prefixId?: number
   } = {
-    depotId: parseInt(state.depot),
-    modelId: parseInt(state.model),
-    prefixId: parseInt(state.prefix)
+    depotId: parseInt(filterValues.depot),
+    modelId: parseInt(filterValues.model),
+    prefixId: parseInt(filterValues.prefix)
   }
 
   if (match.depotId == 0) delete match.depotId
@@ -89,7 +92,14 @@ const tableSlice = createSlice({
   reducers: {
     setFilters: (state, action) => {
       state.tableFilters = action.payload
+    }, 
+    setTableData: (state, action) => { 
+      state.tableData = action.payload
+    }, 
+    setSearch: (state, action) => {
+      state.search = action.payload
     }
+
   },
   extraReducers: (builder) => {
     builder
@@ -112,7 +122,8 @@ export { fetchDataThunk }
 
 export default tableSlice.reducer
 
-export const { setFilters } = tableSlice.actions
+export const { setFilters, setTableData } = tableSlice.actions
 
 export const selectTableState = (state: RootState) => state.table
+export const selectFilters = (state: RootState) => state.table.tableFilters
 export const selectCurrentData = (state: RootState) => state.table.tableData
