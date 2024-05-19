@@ -1,9 +1,6 @@
-'use client'
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+"use client"
+import { createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../store"
-import { createClient } from "@/lib/supabase/client"
-import _, { isEqual } from "lodash"
-
 export type TableRow = {
   id: number
   R_No?: number
@@ -26,65 +23,25 @@ type TableState = {
   tableData: TableRow[]
   loading: boolean
   error: string | null
-  tableFilters: TableFilters, 
-  search : string,
+  tableFilters: TableFilters
+  search: string
+  pagination: boolean
+  page: number
 }
 
 const initialState: TableState = {
   tableData: [],
-  loading: false,
+  loading: true,
   error: null,
   tableFilters: {
-    prefix: "1",
+    prefix: "0",
     model: "0",
     depot: "0"
   },
-  search: ""
+  search: "",
+  pagination: false,
+  page: 1
 }
-
-const fetchDataThunk = createAsyncThunk("table/fetchData", async (filterValues : TableFilters) => {
-  // const state = store.getState().table.tableFilters
-  // console.log("Thunk Fires")
-  // console.log({ fetchDataFilters: state })
-  const supabase = createClient()
-
-  let match: {
-    depotId?: number
-    modelId?: number
-    prefixId?: number
-  } = {
-    depotId: parseInt(filterValues.depot),
-    modelId: parseInt(filterValues.model),
-    prefixId: parseInt(filterValues.prefix)
-  }
-
-  if (match.depotId == 0) delete match.depotId
-  if (match.modelId == 0) delete match.modelId
-  if (match.prefixId == 0) delete match.prefixId
-
-  const { data, error } = await supabase
-    .from("Bus")
-    .select(
-      `
-      id,
-      R_No,
-      R_from,
-      article_url,
-      img_url,
-      Model (name),
-      Depot (name),
-      Type (name),
-      RegPrefix (prefix)
-      `
-    )
-    .match(match)
-
-  if (error) {
-    console.log(error)
-    return []
-  }
-  return data
-})
 
 const tableSlice = createSlice({
   name: "table",
@@ -92,37 +49,39 @@ const tableSlice = createSlice({
   reducers: {
     setFilters: (state, action) => {
       state.tableFilters = action.payload
-    }, 
-    setTableData: (state, action) => { 
+    },
+    setTableData: (state, action) => {
       state.tableData = action.payload
-    }, 
+    },
     setSearch: (state, action) => {
       state.search = action.payload
+    },
+    clearFilters: (state) => {
+      state.tableFilters = { prefix: "0", model: "0", depot: "0" }
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload
+    },
+    setPagination: (state, action) => {
+      state.pagination = action.payload
+    },
+    setPage: (state, action) => {
+      state.page = action.payload
     }
-
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchDataThunk.pending, (state) => {
-        state.loading = true
-        state.error = null
-      })
-      .addCase(fetchDataThunk.fulfilled, (state, action) => {
-        state.loading = false
-        state.tableData = action.payload
-      })
-      .addCase(fetchDataThunk.rejected, (state, action: PayloadAction<any>) => {
-        state.loading = false
-        state.error = action.payload
-      })
   }
 })
 
-export { fetchDataThunk }
-
 export default tableSlice.reducer
 
-export const { setFilters, setTableData } = tableSlice.actions
+export const {
+  setFilters,
+  setTableData,
+  clearFilters,
+  setLoading,
+  setPage,
+  setPagination,
+  setSearch
+} = tableSlice.actions
 
 export const selectTableState = (state: RootState) => state.table
 export const selectFilters = (state: RootState) => state.table.tableFilters

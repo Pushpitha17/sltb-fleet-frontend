@@ -1,43 +1,20 @@
 "use client"
-// import { Select, Option } from "../UI/MaterialComponents"
-import { useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { useForm, SubmitHandler, Controller, useWatch } from "react-hook-form"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select"
+import { useForm } from "react-hook-form"
+
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage
 } from "@/components/ui/form"
-import {
-  useGetAllPrefixesQuery,
-  prefix,
-  useGetAllDepotsQuery,
-  useGetAllModelsQuery
-} from "../../redux/services/FilterOptions"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchDataThunk, setFilters } from "@/redux/slices/tableSlice"
+import { setSearch } from "@/redux/slices/tableSlice"
 import { AppDispatch } from "@/redux/store"
-import { selectFilters } from "@/redux/slices/tableSlice"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-
-type FilterFormValues = {
-  searchText?: string
-}
+import { X } from "lucide-react"
 
 const formSchema = z.object({
   searchText: z.string()
@@ -45,7 +22,6 @@ const formSchema = z.object({
 
 function SearchForm() {
   const dispatch = useDispatch<AppDispatch>()
-  const filterValues = useSelector(selectFilters)
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,13 +31,14 @@ function SearchForm() {
     }
   })
 
-  const values = useWatch({ control: form.control })
-
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    dispatch(setSearch(values.searchText))
+  }
+
+  async function resetForm() {
+    form.reset()
+    onSubmit({ searchText: "" })
   }
 
   return (
@@ -74,16 +51,27 @@ function SearchForm() {
               name="searchText"
               render={({ field }) => (
                 <FormItem>
-                  {/* <FormLabel>Search</FormLabel> */}
                   <FormControl>
-                    <Input placeholder="Registration..." {...field} />
+                    <div className="relative w-full">
+                      <Input
+                        placeholder="Reg No. / Depot"
+                        {...field}
+                        className="w-full md:w-[320px]"
+                      />
+                      <X
+                        className="absolute right-0 top-0 m-2.5 h-4 w-4 text-muted-foreground"
+                        onClick={resetForm}
+                      />
+                    </div>
                   </FormControl>
                 </FormItem>
               )}
             />
           </div>
           <div>
-            <Button type="submit" variant="outline">Search</Button>
+            <Button type="submit" variant="outline">
+              Search
+            </Button>
           </div>
         </form>
       </Form>

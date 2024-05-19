@@ -27,6 +27,16 @@ export const getAllModels = async (supabase: SupabaseClient) => {
   return data
 }
 
+export const getRowCount = async (supabase: SupabaseClient) => {
+  const { data, count, error } = await supabase
+    .from("Bus")
+    .select("*", { count: "estimated" })
+  if (error) {
+    return 0
+  }
+  return count
+}
+
 export const getUnfilteredData = async (
   supabase: SupabaseClient,
   offset: number
@@ -49,7 +59,7 @@ export const getUnfilteredData = async (
     .order("prefixId", { ascending: true })
     .order("R_No", { ascending: true })
     .limit(100)
-    .range(offset, offset + 100)
+    .range(offset, offset + 99)
   if (error) {
     console.log(error)
     return []

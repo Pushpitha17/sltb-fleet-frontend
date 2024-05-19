@@ -1,16 +1,13 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import { filterOptionsApi } from "./services/FilterOptions"
+import { configureStore } from "@reduxjs/toolkit"
 import tableReducer from "./slices/tableSlice";
 
 
 export const store = configureStore({
   reducer: {
     table: tableReducer,
-    [filterOptionsApi.reducerPath]: filterOptionsApi.reducer,
-
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(filterOptionsApi.middleware)
+    getDefaultMiddleware().concat()
 })
 
 // Infer the type of makeStore
