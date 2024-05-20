@@ -104,6 +104,19 @@ function Table({ count }: { count: number | null }) {
                       </div>
                     </td>
                   </tr>
+                ) : !data.length ? (
+                  <tr>
+                    <td colSpan={6} className="h-24">
+                      <div className="pl-4">
+                      <Typography
+                        variant="small"
+                        className="leading-none font-semibold	 text-md"
+                      >
+                        No Records found for Current Search and Filters.
+                      </Typography>
+                      </div>
+                    </td>
+                  </tr>
                 ) : (
                   <>
                     {data.map((r: any) => (

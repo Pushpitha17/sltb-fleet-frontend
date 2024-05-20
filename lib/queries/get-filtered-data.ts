@@ -37,4 +37,5 @@ export function getFilteredData(
     `
     )
     .match(match)
+    .order("R_No", { ascending: true })
 }

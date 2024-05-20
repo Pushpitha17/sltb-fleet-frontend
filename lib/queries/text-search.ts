@@ -41,6 +41,7 @@ export async function getSearch(
     `
       )
       .match(match)
+      .order("R_No", { ascending: true })
 
     return matches.data
   }
@@ -62,6 +63,7 @@ export async function getSearch(
     )
     .match(match)
     .textSearch("R_No", searchText)
+    .order("R_No", { ascending: true })
 
   if (regNoMatches?.data) {
     matchedItems.push(...regNoMatches.data)
@@ -93,6 +95,7 @@ export async function getSearch(
         `
           )
           .match({ ...match, depotId: depot.id })
+          .order("R_No", { ascending: true })
         if (depotItems?.data) {
           matchedItems.push(...depotItems.data)
         }
