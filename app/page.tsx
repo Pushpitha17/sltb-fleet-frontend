@@ -1,8 +1,8 @@
 import Image from "next/image"
 import { PortableText, PortableTextComponents } from "next-sanity"
 import Link from "next/link"
-import { sanityClient } from "../lib/sanity/client"
-import { urlForImage } from "../lib/sanity/image"
+import { sanityClient } from "@/lib/sanity/client"
+import { urlForImage } from "@/lib/sanity/image"
 
 const components: PortableTextComponents = {
   marks: {
@@ -43,7 +43,7 @@ export default async function Home() {
             alt="banner"
             width={875}
             height={350}
-            className="md:px-4 w-full md:px-0 md:w-[875px]"
+            className="md:px-4 w-full md:w-[875px]"
           />
         </div>
         <div className="bg-[#141414]  p-3 md:p-6 rounded-lg mt-10 flex flex-col items-center ">
