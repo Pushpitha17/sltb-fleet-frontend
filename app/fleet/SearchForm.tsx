@@ -10,7 +10,7 @@ import {
   FormItem,
 } from "@/components/ui/form"
 import { useDispatch, useSelector } from "react-redux"
-import { setSearch } from "@/redux/slices/tableSlice"
+import { setSearch, setTableShouldRender } from "@/redux/slices/tableSlice"
 import { AppDispatch } from "@/redux/store"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -34,11 +34,13 @@ function SearchForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     dispatch(setSearch(values.searchText))
+    dispatch(setTableShouldRender(true))
   }
 
   async function resetForm() {
     form.reset()
     onSubmit({ searchText: "" })
+    dispatch(setTableShouldRender(false))
   }
 
   return (

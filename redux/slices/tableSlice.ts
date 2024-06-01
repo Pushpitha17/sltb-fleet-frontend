@@ -20,7 +20,8 @@ export type TableFilters = {
 }
 
 type TableState = {
-  tableData: TableRow[]
+  tableData: TableRow[],
+  tableShouldRender: boolean
   loading: boolean
   error: string | null
   tableFilters: TableFilters
@@ -31,6 +32,7 @@ type TableState = {
 
 const initialState: TableState = {
   tableData: [],
+  tableShouldRender: false,
   loading: true,
   error: null,
   tableFilters: {
@@ -67,7 +69,10 @@ const tableSlice = createSlice({
     },
     setPage: (state, action) => {
       state.page = action.payload
-    }
+    },
+    setTableShouldRender: (state, action) => {
+      state.tableShouldRender = action.payload
+    },
   }
 })
 
@@ -80,9 +85,11 @@ export const {
   setLoading,
   setPage,
   setPagination,
-  setSearch
+  setSearch,
+  setTableShouldRender
 } = tableSlice.actions
 
 export const selectTableState = (state: RootState) => state.table
 export const selectFilters = (state: RootState) => state.table.tableFilters
 export const selectCurrentData = (state: RootState) => state.table.tableData
+export const selectTableShouldRender = (state: RootState) => state.table.tableShouldRender

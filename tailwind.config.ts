@@ -14,13 +14,20 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: {
+        DEFAULT: "1rem",
+        lg: '4rem',
+        xl: '5rem',
+        '2xl': '6rem',
+      },
       screens: {
         "2xl": "1400px"
-      }
+      },
     },
     colors: {
-      slate: colors.slate
+      slate: colors.slate,
+      red: colors.red,
+      orange: colors.orange,
     },
     extend: {
       colors: {
@@ -58,7 +65,7 @@ const config = {
       }
     }
   },
-  plugins: [require("tailwindcss-animate")]
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')]
 } satisfies Config
 
 export default withMT(config)
