@@ -18,7 +18,11 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { useDispatch } from "react-redux"
-import { clearFilters, setFilters } from "@/redux/slices/tableSlice"
+import {
+  clearFilters,
+  setFilters,
+  setTableShouldRender
+} from "@/redux/slices/tableSlice"
 import { AppDispatch } from "@/redux/store"
 import { Filter } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -29,6 +33,7 @@ import {
   AccordionItem,
   AccordionTrigger
 } from "@/components/ui/accordion"
+import { set } from "lodash"
 
 type prefix = {
   id: string
@@ -75,11 +80,13 @@ function TableFilterForm({
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     dispatch(setFilters(values))
+    dispatch(setTableShouldRender(true))
   }
 
   function clearForm() {
     form.reset()
     dispatch(clearFilters())
+    dispatch(setTableShouldRender(false))
   }
 
   return (
@@ -88,7 +95,7 @@ function TableFilterForm({
         type="single"
         collapsible
         className="w-full`"
-        defaultValue=""
+        defaultValue="filters"
       >
         <AccordionItem value="filters" className="border-none">
           <AccordionTrigger className="text-white pr-6">

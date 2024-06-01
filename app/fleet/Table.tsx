@@ -27,6 +27,7 @@ function Table({ count }: { count: number | null }) {
   const pagination = useSelector(selectTableState).pagination
   const search = useSelector(selectTableState).search
   const filters = useSelector(selectTableState).tableFilters
+  const tableShouldRender = useSelector(selectTableState).tableShouldRender
 
   useEffect(() => {
     ;(async () => {
@@ -54,6 +55,12 @@ function Table({ count }: { count: number | null }) {
   }, [search, filters])
 
   // console.log("Re render table", data)
+  if (tableShouldRender === false)
+    return (
+      <div className="py-4 mt-4 md:mt-6 text-white   font-semibold text-center">
+        Use Search or Filter to Browse the Fleet.
+      </div>
+    )
 
   return (
     <>
@@ -63,7 +70,10 @@ function Table({ count }: { count: number | null }) {
             pagination ? (
               `Showing  ${data.length} from ${count} Records.`
             ) : (
-              `Found ${data.length} Records.`
+              <>
+                <span>{`Found ${data.length} Records for `}</span>
+                <span>{`"${search}"`}</span>
+              </>
             )
           ) : (
             <></>
