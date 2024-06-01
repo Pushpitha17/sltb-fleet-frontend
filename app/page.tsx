@@ -1,6 +1,6 @@
 import Image from "next/image"
-import { sanityClient } from "@/sanity/lib/client"
-import { urlForImage } from "@/sanity/lib/image"
+import { sanityClient } from "@/lib/sanity/client"
+import { urlForImage } from "@/lib/sanity/image"
 import { PortableText, PortableTextComponents } from "next-sanity"
 import Link from "next/link"
 

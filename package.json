@@ -21,6 +21,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/themes": "^3.0.5",
     "@reduxjs/toolkit": "^2.2.2",
+    "@sanity/client": "^6.19.1",
     "@sanity/image-url": "^1.0.2",
     "@sanity/vision": "^3.44.0",
     "@supabase-cache-helpers/postgrest-react-query": "^1.6.4",
