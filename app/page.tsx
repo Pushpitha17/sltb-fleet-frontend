@@ -70,18 +70,6 @@ export default async function Home() {
             <div className="my-6 text-white prose prose-a:text-orange-700 prose-p:md:text-justify prose-strong:text-white ">
               <PortableText value={post.body} components={components} />
             </div>
-            <div className="w-full">
-              <p className="text-white">
-                Posted By :{" "}
-                <a
-                  target="_blank"
-                  href={post.author?.profile}
-                  className="text-orange-700"
-                >
-                  {post.author?.name}
-                </a>
-              </p>
-            </div>
           </div>
         </div>
       </div>
