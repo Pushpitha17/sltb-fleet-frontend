@@ -63,7 +63,7 @@ export default async function Home() {
             <div>
               <Link href="/fleet" target="_blank">
                 <button className=" my-6 bg-orange-700 text-white  font-semibold px-6 py-2 rounded-md">
-                  Browse Fleet {">"}
+                  Enter Fleet {">"}
                 </button>
               </Link>
             </div>
