@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import StoreProvider from "./storeprovider"
 import { ReactQueryClientProvider } from "./ReactQueryClientProvider"
+import Script from "next/script"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -18,11 +19,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        <StoreProvider>
-          <ReactQueryClientProvider>
-            <body className={`${inter.className} w-full`}>{children}</body>
-          </ReactQueryClientProvider>
-        </StoreProvider>
+      <head>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-739N1G2PN0"
+        ></Script>
+        <Script id="google-analytics">
+          {`
+           window.dataLayer = window.dataLayer || [];
+           function gtag(){dataLayer.push(arguments);}
+           gtag('js', new Date());
+         
+           gtag('config', 'G-739N1G2PN0');
+          `}
+        </Script>
+      </head>
+      <StoreProvider>
+        <ReactQueryClientProvider>
+          <body className={`${inter.className} w-full`}>{children}</body>
+        </ReactQueryClientProvider>
+      </StoreProvider>
     </html>
   )
 }
