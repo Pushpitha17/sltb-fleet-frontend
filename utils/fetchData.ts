@@ -20,7 +20,10 @@ export const getAllDepots = async (supabase: SupabaseClient) => {
   return data
 }
 export const getAllModels = async (supabase: SupabaseClient) => {
-  const { data, error } = await supabase.from("Model").select("id, name")
+  const { data, error } = await supabase
+    .from("Model")
+    .select("id, name")
+    .order("name", { ascending: true })
   if (error) {
     return []
   }
