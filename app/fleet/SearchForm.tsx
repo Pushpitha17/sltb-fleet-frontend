@@ -56,9 +56,9 @@ function SearchForm() {
                   <FormControl>
                     <div className="relative w-full">
                       <Input
-                        placeholder="Reg No. / Depot"
+                        placeholder="XXXX (Vehicle Reg No. last 4 digits)"
                         {...field}
-                        className="w-full md:w-[320px]"
+                        className="w-full md:w-[360px]"
                       />
                       <X
                         className="absolute right-0 top-0 m-2.5 h-4 w-4 text-muted-foreground"
