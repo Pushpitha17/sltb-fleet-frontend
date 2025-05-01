@@ -8,7 +8,7 @@ export default function FleetPageLayout({
       <div className=" bg-[url('/img/CTB_background.jpg')] max-w-svw min-h-screen">
       <div className="container py-12">
         <div className="flex justify-center ">
-          <img src="/img/Banner.png" alt="banner" width={875} height={350} className="md:px-4 w-full md:px-0 md:w-[875px]"/>
+          <img src="/img/Banner New.jpg" alt="banner" width={875} height={350} className="md:px-4 w-full md:px-0 md:w-[875px]"/>
         </div>
         <div className="">{children}</div>
       </div>

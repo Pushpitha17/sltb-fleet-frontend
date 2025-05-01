@@ -37,13 +37,13 @@ export default async function Home() {
   return (
     <main className=" bg-[url('/img/CTB_background.jpg')] max-w-svw min-h-screen">
       <div className="container py-12">
-        <div className="flex justify-center ">
+        <div className="flex justify-center">
           <img
-            src="/img/Banner.png"
+            src="/img/Banner New.jpg"
             alt="banner"
             width={875}
             height={350}
-            className="md:px-4 w-full md:w-[875px]"
+            className="md:px-4 w-full md:w-[875px] rounded-md"
           />
         </div>
         <div className="bg-[#141414]  p-3 md:p-6 rounded-lg mt-10 flex flex-col items-center ">

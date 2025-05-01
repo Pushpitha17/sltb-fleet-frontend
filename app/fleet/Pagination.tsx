@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from "react-redux"
 import {
   selectTableState,
   selectCurrentData,
-  setTableData
+  setTableData, 
+  setPage
 } from "@/redux/slices/tableSlice"
 import { getUnfilteredData } from "@/utils/fetchData"
 import Image from "next/image"
@@ -21,6 +22,7 @@ function Pagination() {
     setPageLoading(true)
     const newData = await getUnfilteredData(supabase, page * 100)
     dispatch(setTableData([...data, ...newData]))
+    dispatch(setPage(page + 1))
     setPageLoading(false)
   }
 
