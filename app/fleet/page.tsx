@@ -1,21 +1,15 @@
 import TableFilterForm from "./TableFilterForm"
 import Table from "./Table"
 import supabaseServerClient from "@/lib/supabase/server"
-import {
-  getAllPrefixes,
-  getAllDepots,
-  getAllModels,
-  getRowCount
-} from "@/utils/fetchData"
+import { getAllPrefixes, getAllDepots, getAllModels } from "@/utils/fetchData"
 import SearchForm from "./SearchForm"
 
 export default async function Fleet() {
   const supabase = supabaseServerClient()
-  const [prefixes, depots, models, count] = await Promise.all([
+  const [prefixes, depots, models] = await Promise.all([
     getAllPrefixes(supabase),
     getAllDepots(supabase),
-    getAllModels(supabase),
-    getRowCount(supabase)
+    getAllModels(supabase)
   ])
 
   return (
@@ -29,7 +23,7 @@ export default async function Fleet() {
             models={models}
           />
         </div>
-        <Table count={count} />
+  <Table />
       </div>
     </>
   )

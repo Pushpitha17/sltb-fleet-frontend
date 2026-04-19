@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {
   selectTableState,
   selectCurrentData,
-  setTableData, 
+  setTableData,
   setPage
 } from "@/redux/slices/tableSlice"
 import { getUnfilteredData } from "@/utils/fetchData"
@@ -12,12 +12,14 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client"
 
 function Pagination() {
   const [pageLoading, setPageLoading] = useState(false)
+  const sentinelRef = useRef<HTMLTableRowElement>(null)
 
   const dispatch = useDispatch()
   const page = useSelector(selectTableState).page
   const data = useSelector(selectCurrentData)
 
   const handleLoadMore = async () => {
+    if (pageLoading) return
     const supabase = createSupabaseBrowserClient()
     setPageLoading(true)
     const newData = await getUnfilteredData(supabase, page * 100)
@@ -26,33 +28,49 @@ function Pagination() {
     setPageLoading(false)
   }
 
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+
+    const scrollContainer = sentinel.closest(".overflow-auto")
+    if (!scrollContainer) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !pageLoading) {
+          handleLoadMore()
+        }
+      },
+      {
+        root: scrollContainer,
+        rootMargin: "0px 0px 5000px 0px",
+        threshold: 0,
+      }
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [page, pageLoading, data])
+
   return (
     <tfoot>
-      <tr className="h-20">
-        <td colSpan={6} className="text-center">
-          <div className="w-full">
-            <button
-              className="bg-gray-300 text-black w-40 py-1 px-4 rounded hover:bg-gray-400 transition-colors duration-300"
-              onClick={handleLoadMore}
-            >
-              {pageLoading ? (
-                <div className="flex justify-center">
-                  <Image
-                    src="/Spinner.svg"
-                    alt="Vercel Logo"
-                    className="dark:invert"
-                    width={24}
-                    height={24}
-                    priority
-                  />
-                </div>
-              ) : (
-                <>Load More Data</>
-              )}
-            </button>
-          </div>
-        </td>
-      </tr>
+      {pageLoading && (
+        <tr>
+          <td colSpan={6} className="py-4">
+            <div className="flex justify-center items-center gap-2">
+              <Image
+                src="/Spinner-white.svg"
+                alt="loading more"
+                width={28}
+                height={28}
+                priority
+              />
+              <span className="text-gray-400 text-sm">Loading more...</span>
+            </div>
+          </td>
+        </tr>
+      )}
+      <tr ref={sentinelRef} />
     </tfoot>
   )
 }

@@ -32,7 +32,7 @@ type TableState = {
 
 const initialState: TableState = {
   tableData: [],
-  tableShouldRender: false,
+  tableShouldRender: true,
   loading: true,
   error: null,
   tableFilters: {

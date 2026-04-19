@@ -7,19 +7,19 @@ import {
   setPagination,
   setPage
 } from "@/redux/slices/tableSlice"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch } from "@/redux/store"
 import { setTableData, setLoading } from "@/redux/slices/tableSlice"
 import { createSupabaseBrowserClient } from "@/lib/supabase/client"
-import { getUnfilteredData } from "@/utils/fetchData"
+import { getUnfilteredData, getRowCount } from "@/utils/fetchData"
 import { getSearch } from "@/lib/queries/text-search"
 import Pagination from "./Pagination"
 import Image from "next/image"
 
 const TABLE_HEAD = ["R.No", "Depot", "Make and Model", "Type", "R.from", "More"]
 
-function Table({ count }: { count: number | null }) {
+function Table() {
   const dispatch = useDispatch<AppDispatch>()
 
   const data = useSelector(selectCurrentData)
@@ -28,6 +28,9 @@ function Table({ count }: { count: number | null }) {
   const search = useSelector(selectTableState).search
   const filters = useSelector(selectTableState).tableFilters
   const tableShouldRender = useSelector(selectTableState).tableShouldRender
+
+  const [totalCount, setTotalCount] = useState<number | null>(null)
+  const [countLoading, setCountLoading] = useState(false)
 
   useEffect(() => {
     ;(async () => {
@@ -54,6 +57,22 @@ function Table({ count }: { count: number | null }) {
     })()
   }, [search, filters])
 
+  useEffect(() => {
+    ;(async () => {
+      try {
+        setCountLoading(true)
+        const supabase = createSupabaseBrowserClient()
+        const c = await getRowCount(supabase)
+        setTotalCount(c)
+      } catch (e) {
+        // ignore for now; leave totalCount null
+        setTotalCount(null)
+      } finally {
+        setCountLoading(false)
+      }
+    })()
+  }, [])
+
   // console.log("Re render table", data)
   if (tableShouldRender === false)
     return (
@@ -68,7 +87,21 @@ function Table({ count }: { count: number | null }) {
         <Typography className="text-white font-semibold pl-3">
           {!loading ? (
             pagination ? (
-              `Showing  ${data.length} from ${count} Records.`
+              <>
+                <span>{`Showing ${data.length} from `}</span>
+                {countLoading ? (
+                  <Image
+                    src="/Spinner-white.svg"
+                    alt="loading"
+                    width={18}
+                    height={18}
+                    className="inline-block ml-2 align-middle"
+                  />
+                ) : (
+                  <span>{totalCount ?? "—"}</span>
+                )}
+                <span>{" Records."}</span>
+              </>
             ) : (
               <>
                 <span>{`Found ${data.length} Records for `}</span>

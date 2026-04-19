@@ -61,8 +61,8 @@ export const getUnfilteredData = async (
     )
     .order("prefixId", { ascending: true })
     .order("R_No", { ascending: true })
-    .limit(100)
-    .range(offset, offset + 99)
+    .limit(500)
+    .range(offset, offset + 499)
   if (error) {
     console.log(error)
     return []
